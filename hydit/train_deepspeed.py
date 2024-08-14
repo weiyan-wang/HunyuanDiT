@@ -373,8 +373,10 @@ def main(args):
             target_modules=args.target_modules
         )
         if args.use_fp16:
+            model.module.enable_input_requires_grad()
             model.module = get_peft_model(model.module, loraconfig)
         else:
+            model.enable_input_requires_grad()
             model = get_peft_model(model, loraconfig)
         
     logger.info(f"    Training parts: {args.training_parts}")

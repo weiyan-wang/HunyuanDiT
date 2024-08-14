@@ -46,4 +46,5 @@ PYTHONPATH=./ deepspeed hydit/train_deepspeed.py \
     --qk-norm \
     --rope-img base512 \
     --rope-real \
+    --gradient-checkpointing \
     "$@"

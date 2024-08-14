@@ -290,6 +290,16 @@ class HunYuanDiT(ModelMixin, ConfigMixin, PeftAdapterMixin):
     def disable_gradient_checkpointing(self):
         for block in self.blocks:
             block.gradient_checkpointing = False
+  
+    def enable_input_requires_grad(self):
+        def make_inputs_require_grad(module, input, output):
+            output.requires_grad_(True)
+        self.x_embedder.register_forward_hook(make_inputs_require_grad)
+        self.t_embedder.register_forward_hook(make_inputs_require_grad)
+        self.extra_embedder.register_forward_hook(make_inputs_require_grad)
+        if hasattr(self, "style_embedder"):
+            self.style_embedder.register_forward_hook(make_inputs_require_grad)
+  
 
     def forward(self,
                 x,
